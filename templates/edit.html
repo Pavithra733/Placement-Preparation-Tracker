@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Problem</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <nav>
+        <h2>Edit Problem</h2>
+    </nav>
+
+    <div class="container">
+        <h1>Edit Problem</h1>
+
+        <form method="POST" action="/update/{{ problem[0] }}">
+            <input type="text" name="problem_name" value="{{ problem[1] }}" required>
+
+            <select name="difficulty" required>
+                <option value="Easy" {% if problem[2] == 'Easy' %}selected{% endif %}>Easy</option>
+                <option value="Medium" {% if problem[2] == 'Medium' %}selected{% endif %}>Medium</option>
+                <option value="Hard" {% if problem[2] == 'Hard' %}selected{% endif %}>Hard</option>
+            </select>
+
+            <input type="text" name="platform" value="{{ problem[3] }}" required>
+
+            <select name="status" required>
+                <option value="Not Started" {% if problem[4] == 'Not Started' %}selected{% endif %}>Not Started</option>
+                <option value="In Progress" {% if problem[4] == 'In Progress' %}selected{% endif %}>In Progress</option>
+                <option value="Solved" {% if problem[4] == 'Solved' %}selected{% endif %}>Solved</option>
+            </select>
+
+            <button type="submit">Update</button>
+        </form>
+
+        <br><br>
+        <a href="/">Back to Home</a>
+    </div>
+
+</body>
+</html>

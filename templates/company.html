@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Company Application Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<nav class="navbar">
+    <h2>Placement Preparation Tracker</h2>
+
+    <div>
+        <a href="/">Dashboard</a>
+        <a href="/companies">Companies</a>
+        <a href="/logout">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <h1>Company Application Tracker</h1>
+    <div class="stats-container">
+
+    <div class="stat-card">
+        <h3>Total</h3>
+        <p>{{ total }}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Applied</h3>
+        <p>{{ applied }}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>OA</h3>
+        <p>{{ oa }}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Interview</h3>
+        <p>{{ interview }}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Rejected</h3>
+        <p>{{ rejected }}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Selected</h3>
+        <p>{{ selected }}</p>
+    </div>
+
+</div>
+<form method="GET" action="/companies" class="filter-form">
+
+    <input
+        type="text"
+        name="search"
+        placeholder="Search Company or Role"
+        value="{{ request.args.get('search','') }}">
+
+    <select name="status">
+        <option value="">All Status</option>
+        <option value="Applied">Applied</option>
+        <option value="OA Scheduled">OA Scheduled</option>
+        <option value="Interview">Interview</option>
+        <option value="Rejected">Rejected</option>
+        <option value="Selected">Selected</option>
+    </select>
+
+    <button type="submit">Search</button>
+
+</form>
+
+<br>
+
+    <form action="/add_company" method="POST" class="problem-form">
+
+        <input type="text"
+               name="company_name"
+               placeholder="Company Name"
+               required>
+
+        <input type="text"
+               name="role"
+               placeholder="Role"
+               required>
+
+        <input type="date"
+               name="application_date"
+               required>
+
+        <select name="status">
+            <option>Applied</option>
+            <option>OA Scheduled</option>
+            <option>Interview</option>
+            <option>Rejected</option>
+            <option>Selected</option>
+        </select>
+
+        <textarea
+            name="notes"
+            placeholder="Notes"
+            rows="3"></textarea>
+
+        <button type="submit">Save</button>
+
+    </form>
+
+    <br>
+
+    <table>
+
+        <tr>
+            <th>Company</th>
+            <th>Role</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Notes</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for company in companies %}
+
+        <tr>
+    <td>{{ company[1] }}</td>
+    <td>{{ company[2] }}</td>
+    <td>{{ company[3] }}</td>
+    <td>
+    {% if company[4] == "Applied" %}
+        <span class="status applied">Applied</span>
+
+    {% elif company[4] == "OA Scheduled" %}
+        <span class="status oa">OA Scheduled</span>
+
+    {% elif company[4] == "Interview" %}
+        <span class="status interview">Interview</span>
+
+    {% elif company[4] == "Rejected" %}
+        <span class="status rejected">Rejected</span>
+
+    {% elif company[4] == "Selected" %}
+        <span class="status selected">Selected</span>
+
+    {% endif %}
+</td>
+    <td>{{ company[6] }}</td>
+
+    <td>
+        <a href="/edit_company/{{ company[0] }}" class="edit-btn">Edit</a>
+
+        <a href="/delete_company/{{ company[0] }}"
+           class="delete-btn"
+           onclick="return confirm('Delete this application?')">
+           Delete
+        </a>
+    </td>
+</tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+</body>
+</html>

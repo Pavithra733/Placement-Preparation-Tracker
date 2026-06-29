@@ -1,40 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Edit Problem</title>
+    <title>Edit Problem - Placement Preparation Tracker</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 
-    <nav>
-        <h2>Edit Problem</h2>
+    <nav class="navbar">
+        <h2>Placement Preparation Tracker</h2>
     </nav>
 
     <div class="container">
-        <h1>Edit Problem</h1>
+        <div class="edit-page-box">
+            <h1>Edit Problem</h1>
+            <p class="subtitle">Update the problem details below.</p>
 
-        <form method="POST" action="/update/{{ problem[0] }}">
-            <input type="text" name="problem_name" value="{{ problem[1] }}" required>
+            <form action="/update/{{ problem[0] }}" method="POST" class="edit-form">
+                <div class="form-group">
+                    <label>Problem Name</label>
+                    <input type="text" name="problem_name" value="{{ problem[1] }}" required>
+                </div>
 
-            <select name="difficulty" required>
-                <option value="Easy" {% if problem[2] == 'Easy' %}selected{% endif %}>Easy</option>
-                <option value="Medium" {% if problem[2] == 'Medium' %}selected{% endif %}>Medium</option>
-                <option value="Hard" {% if problem[2] == 'Hard' %}selected{% endif %}>Hard</option>
-            </select>
+                <div class="form-group">
+                    <label>Difficulty</label>
+                    <select name="difficulty" required>
+                        <option value="Easy" {% if problem[2] == 'Easy' %}selected{% endif %}>Easy</option>
+                        <option value="Medium" {% if problem[2] == 'Medium' %}selected{% endif %}>Medium</option>
+                        <option value="Hard" {% if problem[2] == 'Hard' %}selected{% endif %}>Hard</option>
+                    </select>
+                </div>
 
-            <input type="text" name="platform" value="{{ problem[3] }}" required>
+                <div class="form-group">
+                    <label>Platform</label>
+                    <input type="text" name="platform" value="{{ problem[3] }}" required>
+                </div>
 
-            <select name="status" required>
-                <option value="Not Started" {% if problem[4] == 'Not Started' %}selected{% endif %}>Not Started</option>
-                <option value="In Progress" {% if problem[4] == 'In Progress' %}selected{% endif %}>In Progress</option>
-                <option value="Solved" {% if problem[4] == 'Solved' %}selected{% endif %}>Solved</option>
-            </select>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select name="status" required>
+                        <option value="Not Started" {% if problem[4] == 'Not Started' %}selected{% endif %}>Not Started</option>
+                        <option value="In Progress" {% if problem[4] == 'In Progress' %}selected{% endif %}>In Progress</option>
+                        <option value="Solved" {% if problem[4] == 'Solved' %}selected{% endif %}>Solved</option>
+                    </select>
+                </div>
 
-            <button type="submit">Update</button>
-        </form>
-
-        <br><br>
-        <a href="/">Back to Home</a>
+                <div class="edit-actions">
+                    <button type="submit" class="save-btn">Update Problem</button>
+                    <a href="/" class="reset-btn">Cancel</a>
+                </div>
+            </form>
+        </div>
     </div>
 
 </body>

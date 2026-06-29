@@ -8,148 +8,157 @@
 
     <nav class="navbar">
         <h2>Placement Preparation Tracker</h2>
+        <a href="/companies">Company Tracker</a>
     </nav>
 
     <div class="container">
         <h1>Placement Preparation Tracker</h1>
-        <p class="subtitle">Track your coding progress and placement preparation in one place.</p>
+        <p class="subtitle">Track coding problems, progress, and placement preparation in one place.</p>
 
-        <!-- Circular Progress Section -->
-        <div class="progress-section">
-            <h2>Your Solved Progress</h2>
+        <!-- Top Section -->
+        <div class="top-section">
+            <!-- Progress -->
+            <div class="progress-card-box">
+                <h3>Solved Progress</h3>
+                <div class="progress-circle"
+                     style="background: conic-gradient(#27ae60 {{ solved_percentage }}%, #e5e7eb {{ solved_percentage }}%);">
+                    <div class="progress-inner">
+                        {{ solved_percentage }}%
+                    </div>
+                </div>
+            </div>
 
-            <div class="progress-circle"
-                 style="background: conic-gradient(#27ae60 {{ solved_percentage }}%, #dfe6f5 {{ solved_percentage }}%);">
-                <div class="progress-inner">
-                    {{ solved_percentage }}%
+            <!-- Dashboard Cards -->
+            <div class="dashboard-grid">
+                <div class="mini-card">
+                    <span>Total</span>
+                    <h3>{{ total_count }}</h3>
+                </div>
+                <div class="mini-card solved-mini">
+                    <span>Solved</span>
+                    <h3>{{ solved_count }}</h3>
+                </div>
+                <div class="mini-card progress-mini">
+                    <span>In Progress</span>
+                    <h3>{{ in_progress_count }}</h3>
+                </div>
+                <div class="mini-card notstarted-mini">
+                    <span>Not Started</span>
+                    <h3>{{ not_started_count }}</h3>
                 </div>
             </div>
         </div>
 
-        <!-- Dashboard Summary -->
-        <div class="dashboard">
-            <div class="card total-card">
-                <h3>Total Problems</h3>
-                <p>{{ total_count }}</p>
+        <!-- Forms Section -->
+        <div class="forms-grid">
+            <!-- Add Problem -->
+            <div class="box">
+                <h3>Add Problem</h3>
+                <form method="POST" action="/add" class="compact-form">
+                    <input type="text" name="problem_name" placeholder="Problem Name" required>
+
+                    <select name="difficulty" required>
+                        <option value="">Difficulty</option>
+                        <option value="Easy">Easy</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Hard">Hard</option>
+                    </select>
+
+                    <input type="text" name="platform" placeholder="Platform" required>
+
+                    <select name="status" required>
+                        <option value="">Status</option>
+                        <option value="Not Started">Not Started</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Solved">Solved</option>
+                    </select>
+
+                    <button type="submit" class="save-btn">Save</button>
+                </form>
             </div>
 
-            <div class="card solved-card">
-                <h3>Solved</h3>
-                <p>{{ solved_count }}</p>
+            <!-- Filter / Sort -->
+            <div class="box">
+                <h3>Filter & Sort</h3>
+                <form method="GET" action="/" class="compact-form">
+                    <select name="difficulty">
+                        <option value="">All Difficulties</option>
+                        <option value="Easy" {% if selected_difficulty == 'Easy' %}selected{% endif %}>Easy</option>
+                        <option value="Medium" {% if selected_difficulty == 'Medium' %}selected{% endif %}>Medium</option>
+                        <option value="Hard" {% if selected_difficulty == 'Hard' %}selected{% endif %}>Hard</option>
+                    </select>
+
+                    <select name="status">
+                        <option value="">All Status</option>
+                        <option value="Solved" {% if selected_status == 'Solved' %}selected{% endif %}>Solved</option>
+                        <option value="In Progress" {% if selected_status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                        <option value="Not Started" {% if selected_status == 'Not Started' %}selected{% endif %}>Not Started</option>
+                    </select>
+
+                    <input type="text" name="platform" placeholder="Platform" value="{{ selected_platform }}">
+
+                    <select name="sort">
+                        <option value="">No Sorting</option>
+                        <option value="newest" {% if selected_sort == 'newest' %}selected{% endif %}>Newest First</option>
+                        <option value="oldest" {% if selected_sort == 'oldest' %}selected{% endif %}>Oldest First</option>
+                        <option value="solved" {% if selected_sort == 'solved' %}selected{% endif %}>Solved First</option>
+                        <option value="not_started" {% if selected_sort == 'not_started' %}selected{% endif %}>Not Started First</option>
+                    </select>
+
+                    <div class="filter-actions">
+                        <button type="submit" class="apply-btn">Apply</button>
+                        <a href="/" class="reset-btn">Reset</a>
+                    </div>
+                </form>
             </div>
-
-            <div class="card progress-card">
-                <h3>In Progress</h3>
-                <p>{{ in_progress_count }}</p>
-            </div>
-
-            <div class="card notstarted-card">
-                <h3>Not Started</h3>
-                <p>{{ not_started_count }}</p>
-            </div>
-        </div>
-
-        <!-- Add Problem Form -->
-        <div class="form-box">
-            <h2>Add New Problem</h2>
-            <form method="POST" action="/add" class="main-form">
-                <input type="text" name="problem_name" placeholder="Problem Name" required>
-
-                <select name="difficulty" required>
-                    <option value="">Select Difficulty</option>
-                    <option value="Easy">Easy</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Hard">Hard</option>
-                </select>
-
-                <input type="text" name="platform" placeholder="Platform" required>
-
-                <select name="status" required>
-                    <option value="">Select Status</option>
-                    <option value="Not Started">Not Started</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Solved">Solved</option>
-                </select>
-
-                <button type="submit" class="save-btn">Save Problem</button>
-            </form>
-        </div>
-
-        <!-- Filter + Sort Form -->
-        <div class="form-box">
-            <h2>Filter and Sort Problems</h2>
-            <form method="GET" action="/" class="filter-form">
-                <select name="difficulty">
-                    <option value="">All Difficulties</option>
-                    <option value="Easy" {% if selected_difficulty == 'Easy' %}selected{% endif %}>Easy</option>
-                    <option value="Medium" {% if selected_difficulty == 'Medium' %}selected{% endif %}>Medium</option>
-                    <option value="Hard" {% if selected_difficulty == 'Hard' %}selected{% endif %}>Hard</option>
-                </select>
-
-                <select name="status">
-                    <option value="">All Status</option>
-                    <option value="Solved" {% if selected_status == 'Solved' %}selected{% endif %}>Solved</option>
-                    <option value="In Progress" {% if selected_status == 'In Progress' %}selected{% endif %}>In Progress</option>
-                    <option value="Not Started" {% if selected_status == 'Not Started' %}selected{% endif %}>Not Started</option>
-                </select>
-
-                <input type="text" name="platform" placeholder="Platform" value="{{ selected_platform }}">
-
-                <select name="sort">
-                    <option value="">No Sorting</option>
-                    <option value="newest" {% if selected_sort == 'newest' %}selected{% endif %}>Newest First</option>
-                    <option value="oldest" {% if selected_sort == 'oldest' %}selected{% endif %}>Oldest First</option>
-                    <option value="solved" {% if selected_sort == 'solved' %}selected{% endif %}>Solved First</option>
-                    <option value="not_started" {% if selected_sort == 'not_started' %}selected{% endif %}>Not Started First</option>
-                </select>
-
-                <div class="button-group">
-                    <button type="submit" class="apply-btn">Apply</button>
-                    <a href="/" class="reset-link">Reset</a>
-                </div>
-            </form>
         </div>
 
         <!-- Problems Table -->
         <div class="table-box">
-            <h2>Saved Problems</h2>
+            <div class="table-header">
+                <h3>Saved Problems</h3>
+            </div>
 
             <table>
-                <tr>
-                    <th>ID</th>
-                    <th>Problem Name</th>
-                    <th>Difficulty</th>
-                    <th>Platform</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Problem Name</th>
+                        <th>Difficulty</th>
+                        <th>Platform</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
 
-                {% for problem in problems %}
-                <tr>
-                    <td>{{ problem[0] }}</td>
-                    <td>{{ problem[1] }}</td>
-                    <td>{{ problem[2] }}</td>
-                    <td>{{ problem[3] }}</td>
+                <tbody>
+                    {% for problem in problems %}
+                    <tr>
+                        <td>{{ problem[0] }}</td>
+                        <td>{{ problem[1] }}</td>
+                        <td>{{ problem[2] }}</td>
+                        <td>{{ problem[3] }}</td>
 
-                    <td>
-                        {% if problem[4] == 'Solved' %}
-                            <span class="status solved">Solved</span>
-                        {% elif problem[4] == 'In Progress' %}
-                            <span class="status progress">In Progress</span>
-                        {% else %}
-                            <span class="status not-started">Not Started</span>
-                        {% endif %}
-                    </td>
+                        <td>
+                            {% if problem[4] == 'Solved' %}
+                                <span class="status solved">Solved</span>
+                            {% elif problem[4] == 'In Progress' %}
+                                <span class="status progress">In Progress</span>
+                            {% else %}
+                                <span class="status not-started">Not Started</span>
+                            {% endif %}
+                        </td>
 
-                    <td class="action-buttons">
-                        <a href="/edit/{{ problem[0] }}" class="edit-btn">Edit</a>
-                        <a href="/delete/{{ problem[0] }}" class="delete-btn"
-                           onclick="return confirm('Are you sure you want to delete this problem?');">
-                           Delete
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
+                        <td class="action-buttons">
+                            <a href="/edit/{{ problem[0] }}" class="edit-btn">Edit</a>
+                            <a href="/delete/{{ problem[0] }}" class="delete-btn"
+                               onclick="return confirm('Are you sure you want to delete this problem?');">
+                               Delete
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
             </table>
         </div>
     </div>

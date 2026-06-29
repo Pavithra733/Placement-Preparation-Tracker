@@ -5,11 +5,14 @@ app = Flask(__name__)
 app.secret_key = "placement_tracker_secret_key"
 
 # MySQL connection
+import os
+
 db = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="Root@123",
-    database="placement_tracker"
+    host=os.getenv("DB_HOST"),
+    user=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASSWORD"),
+    database=os.getenv("DB_NAME"),
+    port=int(os.getenv("DB_PORT", 4000))
 )
 
 cursor = db.cursor()
@@ -389,4 +392,5 @@ def update_company(id):
 
     return redirect("/companies")
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
